@@ -1,4 +1,4 @@
-package com.gasoutapp.gasoutapp;
+package com.gasoutapp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
