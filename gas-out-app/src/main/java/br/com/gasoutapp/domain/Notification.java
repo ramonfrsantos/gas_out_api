@@ -1,4 +1,4 @@
-package com.gasoutapp.model.domain;
+package br.com.gasoutapp.domain;
 
 import java.util.Date;
 

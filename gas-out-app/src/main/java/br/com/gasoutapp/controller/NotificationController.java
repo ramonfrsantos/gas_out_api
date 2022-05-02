@@ -1,4 +1,4 @@
-package com.gasoutapp.controller;
+package br.com.gasoutapp.controller;
 
 import java.util.List;
 
@@ -13,14 +13,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.gasoutapp.model.domain.Notification;
-import com.gasoutapp.model.dto.NotificationDTO;
-import com.gasoutapp.model.service.NotificationService;
+import br.com.gasoutapp.domain.Notification;
+import br.com.gasoutapp.dto.NotificationDTO;
+import br.com.gasoutapp.service.NotificationService;
 
 @RestController
 @RequestMapping("notification")
 public class NotificationController {
-
 	@Autowired
 	private NotificationService notificationService;
 	

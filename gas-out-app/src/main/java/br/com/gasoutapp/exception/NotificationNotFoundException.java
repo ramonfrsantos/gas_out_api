@@ -1,4 +1,4 @@
-package com.gasoutapp.model.exception;
+package br.com.gasoutapp.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -18,6 +18,4 @@ public class NotificationNotFoundException extends RuntimeException {
     public NotificationNotFoundException(String message) {
         super(message);
     }
-
-
 }

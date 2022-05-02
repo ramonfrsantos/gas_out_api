@@ -1,0 +1,11 @@
+# Spring config
+spring:
+  application:
+    name: gas-out-api
+  datasource:
+    url: jdbc:mysql://localhost:3306/conectadev?useSSL=true&useTimezone=true&serverTimezone=UTC
+    username: root
+    password: MySQL4321@
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    show-sql: true

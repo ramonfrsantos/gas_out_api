@@ -1,4 +1,4 @@
-package com.gasoutapp.model.dto;
+package br.com.gasoutapp.dto;
 
 import java.util.Date;
 

@@ -1,13 +1,13 @@
-package com.gasoutapp;
+package br.com.gasoutapp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class GasoutappApplication {
+public class GasOutAppApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(GasoutappApplication.class, args);
+		SpringApplication.run(GasOutAppApplication.class, args);
 	}
-
+	
 }
