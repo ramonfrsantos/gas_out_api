@@ -3,7 +3,11 @@ spring:
   application:
     name: gas-out-api
   datasource:
-    url: ${JDBC_DATASOURCE_URL}
+    url: jdbc:${DATABASE_URL}
+    username: ${USER}
+    password: ${PASSWORD}
   jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     show-sql: true
-    generate-ddl: true
+    hibernate:
+      ddl-auto: update
