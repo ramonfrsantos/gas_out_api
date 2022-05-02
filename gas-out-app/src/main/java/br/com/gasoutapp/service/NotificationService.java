@@ -37,6 +37,7 @@ public class NotificationService {
 		
 		Notification newNotification = new Notification();
 		
+		newNotification.setTitle(dto.getTitle());
 		newNotification.setMessage(dto.getMessage());
 		newNotification.setDate(new Date());
 		

@@ -28,6 +28,9 @@ public class Notification {
     @Column(name = "id")
     private Long id;
 	
+	@Column(name = "title")
+    private String title;
+	
 	@Column(name = "message")
     private String message;
 	
