@@ -31,6 +31,13 @@ public class NotificationController {
 	
 	@CrossOrigin(origins = "*", maxAge = 7200)
 	@ResponseStatus(HttpStatus.OK)
+	@RequestMapping(value = "/find-all-recent", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	public List<Notification> getAllRecentNotifications(){
+		return notificationService.getAllRecentNotifications();
+	}
+	
+	@CrossOrigin(origins = "*", maxAge = 7200)
+	@ResponseStatus(HttpStatus.OK)
 	@RequestMapping(value = "/create", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	public Notification createNotification(@RequestBody NotificationDTO dto){
 		return notificationService.createNotification(dto);

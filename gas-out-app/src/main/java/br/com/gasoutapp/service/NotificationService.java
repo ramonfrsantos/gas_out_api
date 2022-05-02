@@ -20,8 +20,21 @@ public class NotificationService {
 	public List<Notification> getAllNotifications() {
 		return notificationRepository.findAll();
 	}
+	
+	public List<Notification> getAllRecentNotifications() {
+		List<Notification> notifications = notificationRepository.findAll();
+		reverseList(notifications);
+				
+		return notifications;
+	}
 
 	public Notification createNotification(NotificationDTO dto) {
+		
+		List<Notification> notifications = getAllNotifications();
+		if(notifications.size() >= 10) {
+			deleteAllNotifications(notifications);
+		}
+		
 		Notification newNotification = new Notification();
 		
 		newNotification.setMessage(dto.getMessage());
@@ -38,4 +51,21 @@ public class NotificationService {
 			throw new NotificationNotFoundException();
 		}
 	}
+	
+	public void deleteAllNotifications(List<Notification> notifications) {
+		notificationRepository.deleteAll(notifications);
+	}
+	
+	public static<T> void reverseList(List<T> list) {
+        // base case: the list is empty, or only one element is left
+        if (list == null || list.size() <= 1) {
+            return;
+        }
+        // remove the first element
+        T value = list.remove(0);
+        // recur for remaining items
+        reverseList(list);
+        // insert the top element back after recurse for remaining items
+        list.add(value);
+    }
 }
