@@ -13,6 +13,7 @@ public class NotificationDTO {
     private String message;
     private String title;
 	private Date date;	
+    private String monitoringTime;
 	
 	public NotificationDTO(Long id) {
 		this.id = id;
