@@ -11,10 +11,10 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -34,8 +34,7 @@ import lombok.EqualsAndHashCode;
 @Where(clause = "deleted = false")
 public class User {
 	@Id
-    @GeneratedValue(generator = "sq_user")
-    @SequenceGenerator(name = "sq_user", sequenceName = "sq_user", allocationSize = 1)
+	@GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "id")
     private Long id;
 	
