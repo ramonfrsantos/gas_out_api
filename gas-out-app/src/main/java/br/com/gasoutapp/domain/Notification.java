@@ -2,16 +2,22 @@ package br.com.gasoutapp.domain;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.GenericGenerator;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,8 +29,8 @@ import lombok.EqualsAndHashCode;
 @Table(name = "t_notification")
 public class Notification {
 	@Id
-    @GeneratedValue(generator = "increment")
-    @GenericGenerator(name = "increment", strategy = "increment")
+    @GeneratedValue(generator = "sq_notification")
+    @SequenceGenerator(name = "sq_notification", sequenceName = "sq_notification", allocationSize = 1)
     @Column(name = "id")
     private Long id;
 	
@@ -37,5 +43,10 @@ public class Notification {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "notification_date")
 	private Date date;
+	
+	@JsonIgnore
+	@ManyToOne(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name = "fk_user")
+	private User user;
 
 }

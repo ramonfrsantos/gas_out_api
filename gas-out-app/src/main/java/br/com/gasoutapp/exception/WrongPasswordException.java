@@ -1,0 +1,21 @@
+package br.com.gasoutapp.exception;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(code = HttpStatus.OK)
+public class WrongPasswordException extends RuntimeException {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1391752234632451828L;
+	
+	public WrongPasswordException() {
+        super("Senha incorreta.");
+    }
+
+    public WrongPasswordException(String message) {
+        super(message);
+    }
+}
