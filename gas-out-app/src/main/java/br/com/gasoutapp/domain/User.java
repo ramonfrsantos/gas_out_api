@@ -24,11 +24,9 @@ import org.hibernate.annotations.Where;
 
 import br.com.gasoutapp.domain.enums.UserTypeEnum;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 @DynamicUpdate
 @Data
-@EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name = "t_user")
 @Where(clause = "deleted = false")
@@ -50,12 +48,13 @@ public class User {
 	@Column(name = "password")
     private String password;
 	
-	@Column(name = "deleted")
-    private boolean deleted;
-	
 	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	@Column(name = "fk_notification")
 	private List<Notification> notifications = new ArrayList<>();
+	
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@Column(name = "fk_room")
+	private List<Room> rooms = new ArrayList<>();
 	
 	@Temporal(TemporalType.TIMESTAMP)
     @Column(name = "last_update")

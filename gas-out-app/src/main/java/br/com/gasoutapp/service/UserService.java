@@ -13,7 +13,6 @@ import br.com.gasoutapp.domain.enums.UserTypeEnum;
 import br.com.gasoutapp.dto.UserDTO;
 import br.com.gasoutapp.exception.LoginNotFoundException;
 import br.com.gasoutapp.exception.UserAlreadyRegisteredException;
-import br.com.gasoutapp.exception.UserDisabledException;
 import br.com.gasoutapp.exception.UserNotFoundException;
 import br.com.gasoutapp.exception.WrongPasswordException;
 import br.com.gasoutapp.repository.UserRepository;
@@ -51,7 +50,6 @@ public class UserService {
 			newUser.setEmail(userDTO.getEmail());
 		}	
 		
-		newUser.setDeleted(false);
 		newUser.setLogin(userDTO.getEmail());
 		newUser.setLastUpdate(new Date());
 		
@@ -84,9 +82,7 @@ public class UserService {
 				throw new WrongPasswordException();
 			}
 		}
-		if (user.isDeleted()) {
-			throw new UserDisabledException();
-		}
+		
 		LoginResultDTO dto = this.tokenService.createTokenForUser(user);
 		dto.setUserId(user.getId());
 		if (user.getName() != null && !user.getName().equals("")) {

@@ -1,10 +1,8 @@
 package br.com.gasoutapp.dto;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 @Data
-@EqualsAndHashCode(callSuper = false)
 public class UserDTO {
 
 	private Long id;
@@ -12,6 +10,10 @@ public class UserDTO {
 	private String email;	
 	private String password;
 
+	public UserDTO(Long id) {
+		this.id = id;
+	}
+	
 	public UserDTO() {
 	}
 }
