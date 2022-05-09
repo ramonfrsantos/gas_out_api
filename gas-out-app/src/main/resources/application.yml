@@ -3,13 +3,13 @@ spring:
   application:
     name: gas-out-api
   datasource:
-    url: jdbc:mysql://localhost:3306/dbgasoutlocal?useSSL=true&useTimezone=true&serverTimezone=UTC
-    username: root
-    password: MySQL4321@
+    url: jdbc:${DATABASE_URL}
+    username: ${USER}
+    password: ${PASSWORD}
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-    show-sql: true
-    generate-ddl: true
+    hibernate:
+      ddl-auto: update
   mvc:
     pathmatch:
       matching-strategy: ant-path-matcher
