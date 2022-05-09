@@ -16,6 +16,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Where;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -25,6 +26,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "t_notification")
+@Where(clause = "deleted = false")
 public class Notification {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -36,6 +38,9 @@ public class Notification {
 	
 	@Column(name = "message")
     private String message;
+	
+	@Column(name = "deleted")
+    private boolean deleted;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "notification_date")

@@ -50,6 +50,9 @@ public class User {
 	@Column(name = "password")
     private String password;
 	
+	@Column(name = "deleted")
+    private boolean deleted;
+	
 	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	@Column(name = "fk_notification")
 	private List<Notification> notifications = new ArrayList<>();

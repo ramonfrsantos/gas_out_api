@@ -1,7 +1,5 @@
 package br.com.gasoutapp.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -12,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.gasoutapp.domain.Notification;
+import br.com.gasoutapp.abstracts.BaseResponseDTO;
 import br.com.gasoutapp.dto.NotificationDTO;
 import br.com.gasoutapp.service.NotificationService;
 import io.swagger.annotations.ApiImplicitParam;
@@ -24,13 +22,19 @@ public class NotificationController {
 	@Autowired
 	private NotificationService notificationService;
 	
+	protected BaseResponseDTO buildResponse(Object object) {
+		BaseResponseDTO response = new BaseResponseDTO();
+		response.setData(object);
+		return response;
+	}
+	
 	@CrossOrigin(origins = "*", maxAge = 7200)
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Listar notificações")
 	@RequestMapping(value = "/find-all", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	@ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
-	public List<Notification> getAllNotifications(){
-		return notificationService.getAllNotifications();
+	public BaseResponseDTO getAllNotifications(){
+		return buildResponse(notificationService.getAllNotifications());
 	}
 	
 	@CrossOrigin(origins = "*", maxAge = 7200)
@@ -38,8 +42,8 @@ public class NotificationController {
 	@ApiOperation(value = "Listar notificações recentes")
 	@RequestMapping(value = "/find-all-recent", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	@ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
-	public List<Notification> getAllRecentNotifications(){
-		return notificationService.getAllRecentNotifications();
+	public BaseResponseDTO getAllRecentNotifications(){
+		return buildResponse(notificationService.getAllRecentNotifications());
 	}
 	
 	@CrossOrigin(origins = "*", maxAge = 7200)
@@ -47,8 +51,8 @@ public class NotificationController {
 	@ApiOperation(value = "Criar notificação")
 	@RequestMapping(value = "/create", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
-	public Notification createNotification(@RequestBody NotificationDTO dto){
-		return notificationService.createNotification(dto);
+	public BaseResponseDTO createNotification(@RequestBody NotificationDTO dto){
+		return buildResponse(notificationService.createNotification(dto));
 	}	
 	
 	@CrossOrigin(origins = "*", maxAge = 7200)

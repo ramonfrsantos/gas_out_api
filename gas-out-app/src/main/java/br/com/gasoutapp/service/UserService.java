@@ -55,7 +55,7 @@ public class UserService {
 		
 		String password = CriptexCustom.encrypt(userDTO.getPassword());
 
-		newUser.setPassword(CriptexCustom.encrypt(password));
+		newUser.setPassword(password);
 		
 		if(userDTO.getEmail().equals(adminEmail)) {
 			newUser.getRoles().add(UserTypeEnum.ADMIN);			
@@ -109,7 +109,8 @@ public class UserService {
 	public void delete(String login) {
 		User user = userRepository.findByLogin(login);
 		if(user != null) {
-			userRepository.delete(user);			
+			user.setDeleted(true);
+			userRepository.save(user);			
 		} else {
 			throw new UserNotFoundException();
 		}
