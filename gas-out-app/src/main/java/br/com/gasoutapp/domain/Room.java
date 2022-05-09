@@ -12,7 +12,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.Where;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -22,7 +21,6 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "t_room")
-@Where(clause = "deleted = false")
 public class Room {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -40,9 +38,6 @@ public class Room {
 	
 	@Column(name = "number_of_sensors")
 	private Integer numberOfSensors;	
-	
-	@Column(name = "deleted")
-    private boolean deleted;
 	
 	@JsonIgnore
 	@ManyToOne(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
