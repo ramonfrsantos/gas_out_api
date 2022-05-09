@@ -43,5 +43,4 @@ public class Room {
 	@ManyToOne(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinColumn(name = "fk_user")
 	private User user;
-
 }
