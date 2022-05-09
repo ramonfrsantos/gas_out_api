@@ -20,6 +20,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Where;
 
 import br.com.gasoutapp.domain.enums.UserTypeEnum;
@@ -53,6 +55,7 @@ public class User {
 	private List<Notification> notifications = new ArrayList<>();
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@Fetch(value = FetchMode.SUBSELECT)
 	@Column(name = "fk_room")
 	private List<Room> rooms = new ArrayList<>();
 	
