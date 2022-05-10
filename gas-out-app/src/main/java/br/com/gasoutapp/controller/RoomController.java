@@ -1,5 +1,7 @@
 package br.com.gasoutapp.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -9,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.gasoutapp.abstracts.BaseResponseDTO;
+import br.com.gasoutapp.domain.Room;
 import br.com.gasoutapp.dto.RoomDTO;
 import br.com.gasoutapp.service.RoomService;
 import io.swagger.annotations.ApiImplicitParam;
@@ -22,19 +24,13 @@ public class RoomController {
 	@Autowired
 	private RoomService roomService;
 	
-	protected BaseResponseDTO buildResponse(Object object) {
-		BaseResponseDTO response = new BaseResponseDTO();
-		response.setData(object);
-		return response;
-	}
-	
 	@CrossOrigin(origins = "*", maxAge = 7200)
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Listar cômodos cadastrados")
 	@RequestMapping(value = "/find-all", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	@ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
-	public BaseResponseDTO getAllRooms(){
-		return buildResponse(roomService.getAllRooms());
+	public List<Room> getAllRooms(){
+		return roomService.getAllRooms();
 	}
 	
 	@CrossOrigin(origins = "*", maxAge = 7200)
@@ -42,8 +38,8 @@ public class RoomController {
 	@ApiOperation(value = "Listar cômodos cadastrados do usuário")
 	@RequestMapping(value = "/find-all/{login}", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	@ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
-	public BaseResponseDTO getAllUserRooms(@PathVariable String login){
-		return buildResponse(roomService.getAllUserRooms(login));
+	public List<Room> getAllUserRooms(@PathVariable String login){
+		return roomService.getAllUserRooms(login);
 	}	
 	
 	@CrossOrigin(origins = "*", maxAge = 7200)
@@ -51,8 +47,8 @@ public class RoomController {
 	@ApiOperation(value = "Criar cômodo para o usuário")
 	@RequestMapping(value = "/create", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
-	public BaseResponseDTO createRoom(@RequestBody RoomDTO dto){
-		return buildResponse(roomService.createRoom(dto));
+	public Room createRoom(@RequestBody RoomDTO dto){
+		return roomService.createRoom(dto);
 	}
 	
 	@CrossOrigin(origins = "*", maxAge = 7200)
