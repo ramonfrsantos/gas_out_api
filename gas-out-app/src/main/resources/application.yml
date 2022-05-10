@@ -1,7 +1,7 @@
 # Spring config
 spring:
   application:
-    name: gas-out-api
+    name: gas-out-api-dev
   datasource:
     url: jdbc:${DATABASE_URL}
     username: ${USER}
