@@ -6,6 +6,8 @@ spring:
     url: jdbc:${DATABASE_URL}
     username: ${USER}
     password: ${PASSWORD}
+    hikari:
+      max-lifetime:  600000
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
