@@ -10,5 +10,4 @@ public class GasOutAppApplication {
 		SpringApplication.run(GasOutAppApplication.class, args);
 //		System.out.println("Senha: " + CriptexCustom.decrypt(""));
 	}
-	
 }
