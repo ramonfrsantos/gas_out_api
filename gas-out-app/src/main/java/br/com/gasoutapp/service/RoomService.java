@@ -77,6 +77,7 @@ public class RoomService {
 		if(user != null) {
 			User newUser = new User();
 			newUser = user;
+			
 			List<Room> roomsList = roomRepository.findAllByUser(user);
 			for(Room room: roomsList) {
 				if(room.getId() == id) {
