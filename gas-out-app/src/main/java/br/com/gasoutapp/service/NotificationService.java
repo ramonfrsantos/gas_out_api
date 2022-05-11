@@ -28,8 +28,10 @@ public class NotificationService {
 		return notificationRepository.findAll();
 	}
 	
-	public List<Notification> getAllRecentNotifications() {
-		List<Notification> notifications = notificationRepository.findAll();
+
+	public List<Notification> getAllRecentNotifications(String login) {
+		User user = userRepository.findByLogin(login);
+		List<Notification> notifications = notificationRepository.findAllByUser(user);
 		reverseList(notifications);
 				
 		return notifications;
@@ -46,7 +48,7 @@ public class NotificationService {
 				
 		List<Notification> notifications = notificationRepository.findAllByUser(user);
 		if(notifications.size() >= 10) {
-			deleteAllNotifications(notifications);
+			setAllUserNotificationsNull(notifications, user);
 		} else {
 			newUserNotifications = notifications;
 		}
@@ -72,30 +74,42 @@ public class NotificationService {
 		return newNotification;
 	}
 
-	public void deleteNotification(Long id) {
-		Notification notification = notificationRepository.getById(id);
-		if(notification != null) {
-			notificationRepository.delete(notification);
-		} else {
+	public void deleteNotification(Long id, String login) {
+		Notification checkedNotification = notificationRepository.getById(id);
+		if(checkedNotification == null) {
 			throw new NotificationNotFoundException();
+		}
+		
+		User user = userRepository.findByLogin(login);
+		if(user != null) {
+			User newUser = new User();
+			newUser = user;
+			List<Notification> notificationsList = notificationRepository.findAllByUser(user);
+			for(Notification notification: notificationsList) {
+				if(notification.getId() == id) {
+					notification.setUser(null);
+					notificationRepository.save(notification);
+					
+					newUser.setNotifications(notificationRepository.findAllByUser(user));
+					userRepository.save(newUser);
+					notificationRepository.delete(notification);	
+				}
+			}
 		}
 	}
 	
-	public void deleteAllNotifications(List<Notification> notifications) {
+	public void setAllUserNotificationsNull(List<Notification> notifications, User user) {
+		if(user != null) {
+			User newUser = new User();
+			newUser = user;
+			List<Notification> newNotificationsList = new ArrayList<>();
+			newUser.setNotifications(newNotificationsList);
+			userRepository.save(newUser);
+		}
 		for(Notification notification: notifications) {		
 			notification.setUser(null);
 			notification = notificationRepository.save(notification);
 		}		
-	}
-	
-	public Integer deleteAllNoUsersNotifications(List<Notification> noUserNotifications) {
-		if(noUserNotifications.size() > 0) {
-			for(Notification n: noUserNotifications) {
-				notificationRepository.delete(n);				
-			}
-		}
-		
-		return noUserNotifications.size();
 	}
 	
 	public static<T> void reverseList(List<T> list) {

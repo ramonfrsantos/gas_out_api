@@ -36,10 +36,10 @@ public class NotificationController {
 	@CrossOrigin(origins = "*", maxAge = 7200)
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Listar notificações recentes")
-	@RequestMapping(value = "/find-all-recent", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "/find-all-recent/{login}", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	@ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
-	public List<Notification> getAllRecentNotifications(){
-		return notificationService.getAllRecentNotifications();
+	public List<Notification> getAllRecentNotifications(@PathVariable String login){
+		return notificationService.getAllRecentNotifications(login);
 	}
 	
 	@CrossOrigin(origins = "*", maxAge = 7200)
@@ -54,9 +54,9 @@ public class NotificationController {
 	@CrossOrigin(origins = "*", maxAge = 7200)
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Excluir notificação por id")
-	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "/delete/{login}/{id}", method = RequestMethod.DELETE, produces = "application/json;charset=UTF-8")
 	@ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
-	public void deleteNotification(@PathVariable Long id){
-		notificationService.deleteNotification(id);
+	public void deleteNotification(@PathVariable Long id, @PathVariable String login){
+		notificationService.deleteNotification(id, login);
 	}	
 }
