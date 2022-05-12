@@ -9,6 +9,7 @@ public class UserDTO {
 	private String name;
 	private String email;	
 	private String password;
+	private String verificationCode;
 
 	public UserDTO(Long id) {
 		this.id = id;

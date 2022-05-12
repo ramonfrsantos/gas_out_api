@@ -50,6 +50,9 @@ public class User {
 	@Column(name = "password")
     private String password;
 	
+	@Column(name = "verification_code")
+	private String verificationCode;
+	
 	@Column(name = "deleted")
     private boolean deleted;
 	

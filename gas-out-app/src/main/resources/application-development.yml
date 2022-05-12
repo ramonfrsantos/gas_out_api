@@ -1,5 +1,16 @@
 # Spring config
 spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: contato.gasout@gmail.com
+    password: vjtvrwgangxbawwm
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
   application:
     name: gas-out-api-dev
   datasource:

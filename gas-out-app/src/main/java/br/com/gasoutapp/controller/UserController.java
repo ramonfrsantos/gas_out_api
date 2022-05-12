@@ -28,11 +28,31 @@ public class UserController {
 	@CrossOrigin(origins = "*", maxAge = 7200)
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
+	@ApiOperation(value = "Envia email de verificação de senha")
+	@RequestMapping(path = { "/verification-code/{login}" }, method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	@ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
+	public String sendVerificationMail(@PathVariable String login) throws Exception {
+		return userService.sendVerificationMail(login);
+	}
+	
+	@CrossOrigin(origins = "*", maxAge = 7200)
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Criar usuário")
 	@RequestMapping(path = { "/register" }, method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
 	public User register(@RequestBody UserDTO dto) throws Exception {
 		return userService.register(dto);
+	}
+	
+	@CrossOrigin(origins = "*", maxAge = 7200)
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	@ApiOperation(value = "Envia email de verificação de senha")
+	@RequestMapping(path = { "/refresh/{login}/{password}" }, method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
+	@ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
+	public User sendVerificationMail(@PathVariable String password, @PathVariable String login) throws Exception {
+		return userService.refreshPassword(password, login);
 	}
 	
 	@CrossOrigin(origins = "*", maxAge = 7200)

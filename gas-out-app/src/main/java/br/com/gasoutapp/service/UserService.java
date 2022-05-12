@@ -1,10 +1,16 @@
 package br.com.gasoutapp.service;
 
+import java.security.SecureRandom;
 import java.text.Normalizer;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -28,6 +34,12 @@ public class UserService {
 	
 	@Autowired
 	private TokenService tokenService;
+	
+	@Autowired
+	private JavaMailSender mailSender;
+	
+	@Value("${spring.mail.username}")
+	private String companyEmail;
 	
 	private String adminEmail = "ramonfrsantos@gmail.com";
 	
@@ -120,5 +132,54 @@ public class UserService {
 		String stringNormalizada = Normalizer.normalize(string, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
 		
 		return stringNormalizada;
+	}
+	
+	public String sendVerificationMail(String login) throws Exception {
+		User newUser = new User();
+		User user = userRepository.findByEmail(login);
+		if(user == null) {
+			throw new UserNotFoundException();
+		}
+		newUser = user;
+		
+		System.out.println("Preparando para enviar a mensagem...");
+
+		String verificationCode = this.createRandomCode(6, "0123456789");
+		
+		newUser.setVerificationCode(verificationCode);
+		newUser = userRepository.save(newUser);
+		
+		String fullName = newUser.getName();
+		String firstName = fullName.split(" ", 0)[0];
+		
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setFrom(companyEmail);
+		message.setTo(newUser.getEmail());
+		message.setText("Olá, " + firstName + "! Seu código de verificação para a alteração da senha é:\n\n" + newUser.getVerificationCode() + "\n\nAgora é só entrar no aplicativo GasOut e escolher uma nova senha.");
+		message.setSubject("Alteração de senha no aplicativo GasOut");
+
+		mailSender.send(message);
+		
+		System.out.println("A Mensagem foi enviada.");
+		
+		return newUser.getVerificationCode();
+	}
+
+	public String createRandomCode(int tamanhoCodigo, String caracteresUsados) {
+		List<Character> grupoCaracteres = caracteresUsados.chars().mapToObj(i -> (char) i).collect(Collectors.toList());
+		Collections.shuffle(grupoCaracteres, new SecureRandom());
+		return grupoCaracteres.stream().map(Object::toString).limit(tamanhoCodigo).collect(Collectors.joining());
+	}
+
+	public User refreshPassword(String password, String login) {
+		User newUser = new User();
+		User user = userRepository.findByEmail(login);
+		if(user == null) {
+			throw new UserNotFoundException();
+		}
+		newUser = user;
+		
+		newUser.setPassword(CriptexCustom.encrypt(password));
+		return userRepository.save(newUser);
 	}
 }
