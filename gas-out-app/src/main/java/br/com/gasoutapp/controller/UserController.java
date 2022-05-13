@@ -29,10 +29,30 @@ public class UserController {
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Envia email de verificação de senha")
-	@RequestMapping(path = { "/verification-code/{login}" }, method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	@RequestMapping(path = { "/send-verification-mail/{login}" }, method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
 	@ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
 	public String sendVerificationMail(@PathVariable String login) throws Exception {
 		return userService.sendVerificationMail(login);
+	}
+	
+	@CrossOrigin(origins = "*", maxAge = 7200)
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	@ApiOperation(value = "Buscar código de verificação de senha")
+	@RequestMapping(path = { "/verification-code/{login}" }, method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	@ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
+	public String getVerificationCode(@PathVariable String login) throws Exception {
+		return userService.getVerificationCode(login);
+	}
+	
+	@CrossOrigin(origins = "*", maxAge = 7200)
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	@ApiOperation(value = "Verificar se códigos são iguais")
+	@RequestMapping(path = { "/check-codes-equal/{newCode}/{login}" }, method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	@ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
+	public boolean checkIfCodesAreEqual(@PathVariable String login, @PathVariable String newCode) throws Exception {
+		return userService.checkIfCodesAreEqual(login, newCode);
 	}
 	
 	@CrossOrigin(origins = "*", maxAge = 7200)
@@ -48,7 +68,7 @@ public class UserController {
 	@CrossOrigin(origins = "*", maxAge = 7200)
 	@ResponseBody
 	@ResponseStatus(HttpStatus.OK)
-	@ApiOperation(value = "Envia email de verificação de senha")
+	@ApiOperation(value = "Cria nova senha")
 	@RequestMapping(path = { "/refresh/{login}/{password}" }, method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
 	@ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
 	public User sendVerificationMail(@PathVariable String password, @PathVariable String login) throws Exception {

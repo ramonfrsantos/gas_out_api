@@ -128,6 +128,28 @@ public class UserService {
 		}
 	}
 	
+	public String getVerificationCode(String login) {
+		User user = userRepository.findByEmail(login);
+		if(user == null) {
+			throw new UserNotFoundException();
+		}
+		
+		return user.getVerificationCode();
+	}
+	
+	public boolean checkIfCodesAreEqual(String login, String newCode) {
+		User user = userRepository.findByEmail(login);
+		if(user == null) {
+			throw new UserNotFoundException();
+		}
+		
+		if(user.getVerificationCode().equals(newCode)) {
+			return true;
+		} else {
+			return false;
+		}		
+	}
+	
 	public String normalizeString(String string) {
 		String stringNormalizada = Normalizer.normalize(string, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
 		
