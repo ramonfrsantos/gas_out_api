@@ -5,9 +5,9 @@ import lombok.Data;
 @Data
 public class LoginResultDTO {
 
-	private Long userId;
-	private String login;
-	private String token;
-	private String refreshToken;
-	private String userName;
+    private Long userId;
+    private String login;
+    private String token;
+    private String refreshToken;
+    private String userName;
 }

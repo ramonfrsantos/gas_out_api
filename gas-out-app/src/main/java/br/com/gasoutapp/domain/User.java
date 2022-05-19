@@ -33,48 +33,48 @@ import lombok.Data;
 @Table(name = "t_user")
 @Where(clause = "deleted = false")
 public class User {
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long id;
-	
-	@Column(name = "name")
+
+    @Column(name = "name")
     private String name;
-	
-	@Column(name = "login")
+
+    @Column(name = "login")
     private String login;
-	
-	@Column(name = "email")
+
+    @Column(name = "email")
     private String email;
-	
-	@Column(name = "password")
+
+    @Column(name = "password")
     private String password;
-	
-	@Column(name = "verification_code")
-	private String verificationCode;
-	
-	@Column(name = "deleted")
+
+    @Column(name = "verification_code")
+    private String verificationCode;
+
+    @Column(name = "deleted")
     private boolean deleted;
-	
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
-	@Column(name = "fk_notification")
-	private List<Notification> notifications = new ArrayList<>();
-	
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
-	@Fetch(value = FetchMode.SUBSELECT)
-	@Column(name = "fk_room")
-	private List<Room> rooms = new ArrayList<>();
-	
-	@Temporal(TemporalType.TIMESTAMP)
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Column(name = "fk_notification")
+    private List<Notification> notifications = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
+    @Column(name = "fk_room")
+    private List<Room> rooms = new ArrayList<>();
+
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "last_update")
     private Date lastUpdate;
-	
-	@ElementCollection
+
+    @ElementCollection
     @CollectionTable(name = "t_user_role", joinColumns = @JoinColumn(name = "fk_user"))
     @Column(name = "role")
     private List<UserTypeEnum> roles = new ArrayList<>();
-	
-	@ElementCollection
+
+    @ElementCollection
     @CollectionTable(name = "t_user_device", joinColumns = @JoinColumn(name = "fk_user"))
     @Column(name = "device")
     private List<String> devices = new ArrayList<>();

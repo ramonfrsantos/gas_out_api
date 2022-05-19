@@ -12,17 +12,17 @@ spring:
           starttls:
             enable: true
   application:
-    name: gas-out-api
+    name: gas-out-api-dev
   datasource:
-    url: jdbc:${DATABASE_URL}
-    username: ${USER}
-    password: ${PASSWORD}
+    url: jdbc:mysql://localhost:3306/dbgasoutlocal?useSSL=true&useTimezone=true&serverTimezone=UTC
+    username: root
+    password: MySQL4321@
     hikari:
       max-lifetime:  600000
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-    hibernate:
-      ddl-auto: update
+    show-sql: true
+    generate-ddl: true
   mvc:
     pathmatch:
       matching-strategy: ant-path-matcher

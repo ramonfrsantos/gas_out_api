@@ -6,7 +6,6 @@ import lombok.Data;
 
 @Data
 public class NotificationDTO {
-
 	private Long id;
     private String message;
     private String title;
@@ -17,6 +16,5 @@ public class NotificationDTO {
 		this.id = id;
 	}
 		
-	public NotificationDTO() {
-	}
+	public NotificationDTO() {}
 }

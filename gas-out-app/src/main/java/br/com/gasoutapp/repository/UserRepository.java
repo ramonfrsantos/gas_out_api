@@ -9,14 +9,13 @@ import br.com.gasoutapp.domain.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-
     public User findByLoginAndPassword(String login, String password);
 
-	public User findByLogin(String login);
+    public User findByLogin(String login);
 
-	public User findByPassword(String password);
+    public User findByPassword(String password);
 
-	public List<User> findAllByEmail(String login);
+    public List<User> findAllByEmail(String login);
 
-	public User findByEmail(String email);
+    public User findByEmail(String email);
 }

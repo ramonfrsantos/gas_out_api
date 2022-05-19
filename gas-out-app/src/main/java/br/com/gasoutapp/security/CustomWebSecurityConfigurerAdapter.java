@@ -31,13 +31,13 @@ public class CustomWebSecurityConfigurerAdapter extends WebSecurityConfigurerAda
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
-        .antMatchers("/auth").permitAll().and().authorizeRequests()
-        .antMatchers("/auth/**").permitAll().and().authorizeRequests()
-        .antMatchers("/user").authenticated().antMatchers("/user").hasAuthority("ADMIN")
-        .antMatchers("/user/**").authenticated().antMatchers("/user/**").hasAuthority("ADMIN")
-        .antMatchers("/notification").authenticated().antMatchers("/notification").hasAuthority("ADMIN")
-        .antMatchers("/notification/**").authenticated().antMatchers("/notification/**").hasAuthority("ADMIN")
-        .and().sessionManagement()
+                .antMatchers("/auth").permitAll().and().authorizeRequests()
+                .antMatchers("/auth/**").permitAll().and().authorizeRequests()
+                .antMatchers("/user").authenticated().antMatchers("/user").hasAuthority("ADMIN")
+                .antMatchers("/user/**").authenticated().antMatchers("/user/**").hasAuthority("ADMIN")
+                .antMatchers("/notification").authenticated().antMatchers("/notification").hasAuthority("ADMIN")
+                .antMatchers("/notification/**").authenticated().antMatchers("/notification/**").hasAuthority("ADMIN")
+                .and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
     }

@@ -10,6 +10,5 @@ import br.com.gasoutapp.domain.User;
 
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
-
-	List<Notification> findAllByUser(User user);
+    List<Notification> findAllByUser(User user);
 }

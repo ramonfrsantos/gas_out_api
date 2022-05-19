@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class UserDTO {
-
 	private Long id;
 	private String name;
 	private String email;	
@@ -15,6 +14,5 @@ public class UserDTO {
 		this.id = id;
 	}
 	
-	public UserDTO() {
-	}
+	public UserDTO() {}
 }

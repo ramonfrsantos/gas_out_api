@@ -10,8 +10,7 @@ import br.com.gasoutapp.domain.User;
 
 @Repository
 public interface RoomRepository extends JpaRepository<Room, Long> {
+    List<Room> findAllByUser(User user);
 
-	List<Room> findAllByUser(User user);
-
-	Room findByName(String name);
+    Room findByName(String name);
 }

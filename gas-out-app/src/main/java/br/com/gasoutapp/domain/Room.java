@@ -22,25 +22,28 @@ import lombok.Data;
 @Entity
 @Table(name = "t_room")
 public class Room {
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long id;
-	
-	@Column(name = "name")
+
+    @Column(name = "name")
     private String name;
-	
-	@Column(name = "alarm_on")
+
+    @Column(name = "notification_on")
+    private boolean notificationOn;
+
+    @Column(name = "alarm_on")
     private boolean alarmOn;
-	
-	@Column(name = "sprinklers_on")
-	private boolean sprinklersOn;
-	
-	@Column(name = "number_of_sensors")
-	private Integer numberOfSensors;	
-	
-	@JsonIgnore
-	@ManyToOne(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
-	@JoinColumn(name = "fk_user")
-	private User user;
+
+    @Column(name = "sprinklers_on")
+    private boolean sprinklersOn;
+
+    @Column(name = "sensor_value")
+    private Integer sensorValue;
+
+    @JsonIgnore
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "fk_user")
+    private User user;
 }

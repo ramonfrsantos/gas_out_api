@@ -8,8 +8,9 @@ public class RoomDTO {
 	private Long id;
 	private String name;
     private boolean alarmOn;
+	private boolean notificationOn;
 	private boolean sprinklersOn;	
-	private Integer numberOfSensors;	
+	private Integer sensorValue;
 	private User user;
 
 	public RoomDTO(Long id) {
@@ -17,6 +18,5 @@ public class RoomDTO {
 	}
 
 
-	public RoomDTO() {
-	}
+	public RoomDTO() {}
 }

@@ -26,24 +26,24 @@ import lombok.Data;
 @Entity
 @Table(name = "t_notification")
 public class Notification {
-	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long id;
-	
-	@Column(name = "title")
+
+    @Column(name = "title")
     private String title;
-	
-	@Column(name = "message")
+
+    @Column(name = "message")
     private String message;
-	
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "notification_date")
-	private Date date;
-	
-	@JsonIgnore
-	@ManyToOne(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
-	@JoinColumn(name = "fk_user")
-	private User user;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "notification_date")
+    private Date date;
+
+    @JsonIgnore
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "fk_user")
+    private User user;
 
 }

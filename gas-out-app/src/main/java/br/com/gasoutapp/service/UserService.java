@@ -28,180 +28,178 @@ import br.com.gasoutapp.security.TokenService;
 
 @Service
 public class UserService {
-	
-	@Autowired
-	private UserRepository userRepository;
-	
-	@Autowired
-	private TokenService tokenService;
-	
-	@Autowired
-	private JavaMailSender mailSender;
-	
-	@Value("${spring.mail.username}")
-	private String companyEmail;
-	
-	private String adminEmail = "ramonfrsantos@gmail.com";
-	
-	public User parseDTOToEntity(UserDTO userDTO) {
-		User newUser = new User();
-		User user = userRepository.findByEmail(userDTO.getEmail());
 
-		if (user == null) {
-			user = new User();
-		} else {
-			throw new UserAlreadyRegisteredException();
-		}
+    @Autowired
+    private UserRepository userRepository;
 
-		newUser = user;
+    @Autowired
+    private TokenService tokenService;
 
-		if (userDTO.getName() != null && !userDTO.getName().equals("")) {
-			newUser.setName(normalizeString(userDTO.getName()));
-		}
-		if (userDTO.getEmail() != null && !userDTO.getEmail().equals("")) {
-			newUser.setEmail(userDTO.getEmail());
-		}	
-		
-		newUser.setLogin(userDTO.getEmail());
-		newUser.setLastUpdate(new Date());
-		
-		String password = CriptexCustom.encrypt(userDTO.getPassword());
+    @Autowired
+    private JavaMailSender mailSender;
 
-		newUser.setPassword(password);
-		
-		if(userDTO.getEmail().equals(adminEmail)) {
-			newUser.getRoles().add(UserTypeEnum.ADMIN);			
-		} else {
-			newUser.getRoles().add(UserTypeEnum.CLIENTE);						
-		}
+    @Value("${spring.mail.username}")
+    private String companyEmail;
 
-		return newUser;
-	}
+    private String adminEmail = "ramonfrsantos@gmail.com";
 
-	@ExceptionHandler({ Exception.class })
-	public LoginResultDTO login(String login, String password, String token) throws Exception {
-		if (password.length() < 6) {
-			throw new WrongPasswordException();
-		}
-		password = CriptexCustom.encrypt(password);
-		User user = userRepository.findByLoginAndPassword(login, password);
-		User userLogin = userRepository.findByLogin(login);
-		if (user == null) {
-			if (userLogin == null) {
-				throw new LoginNotFoundException();
-			}
-			if (!userLogin.getPassword().equals(password)) {
-				throw new WrongPasswordException();
-			}
-		}
-		
-		LoginResultDTO dto = this.tokenService.createTokenForUser(user);
-		dto.setUserId(user.getId());
-		if (user.getName() != null && !user.getName().equals("")) {
+    public User parseDTOToEntity(UserDTO userDTO) {
+        User newUser;
+        User user = userRepository.findByEmail(userDTO.getEmail());
 
-			dto.setUserName(normalizeString(user.getName()));
-		}
-		if (token != null && !user.getDevices().contains(token)) {
-			user.getDevices().add(token);
-		}
-		userRepository.save(user);
+        if (user == null) {
+            user = new User();
+        } else {
+            throw new UserAlreadyRegisteredException();
+        }
 
-		return dto;
-	}
-	
-	public List<User> findAll() {
-		return userRepository.findAll();
-	}
-	
-	public User register(UserDTO userDTO) {
-		User user = parseDTOToEntity(userDTO);		
-		return userRepository.save(user);
-	}
-	
-	public void delete(String login) {
-		User user = userRepository.findByLogin(login);
-		if(user != null) {
-			user.setDeleted(true);
-			userRepository.save(user);			
-		} else {
-			throw new UserNotFoundException();
-		}
-	}
-	
-	public String getVerificationCode(String login) {
-		User user = userRepository.findByEmail(login);
-		if(user == null) {
-			throw new UserNotFoundException();
-		}
-		
-		return user.getVerificationCode();
-	}
-	
-	public boolean checkIfCodesAreEqual(String login, String newCode) {
-		User user = userRepository.findByEmail(login);
-		if(user == null) {
-			throw new UserNotFoundException();
-		}
-		
-		if(user.getVerificationCode().equals(newCode)) {
-			return true;
-		} else {
-			return false;
-		}		
-	}
-	
-	public String normalizeString(String string) {
-		String stringNormalizada = Normalizer.normalize(string, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
-		
-		return stringNormalizada;
-	}
-	
-	public String sendVerificationMail(String login) throws Exception {
-		User newUser = new User();
-		User user = userRepository.findByEmail(login);
-		if(user == null) {
-			throw new UserNotFoundException();
-		}
-		newUser = user;
-		
-		System.out.println("Preparando para enviar a mensagem...");
+        newUser = user;
 
-		String verificationCode = this.createRandomCode(6, "0123456789");
-		
-		newUser.setVerificationCode(verificationCode);
-		newUser = userRepository.save(newUser);
-		
-		String fullName = newUser.getName();
-		String firstName = fullName.split(" ", 0)[0];
-		
-		SimpleMailMessage message = new SimpleMailMessage();
-		message.setFrom(companyEmail);
-		message.setTo(newUser.getEmail());
-		message.setText("Olá, " + firstName + "! Seu código de verificação para a alteração da senha é:\n\n" + newUser.getVerificationCode() + "\n\nAgora é só entrar no aplicativo GasOut e escolher uma nova senha.");
-		message.setSubject("Alteração de senha no aplicativo GasOut");
+        if (userDTO.getName() != null && !userDTO.getName().equals("")) {
+            newUser.setName(normalizeString(userDTO.getName()));
+        }
+        if (userDTO.getEmail() != null && !userDTO.getEmail().equals("")) {
+            newUser.setEmail(userDTO.getEmail());
+        }
 
-		mailSender.send(message);
-		
-		System.out.println("A Mensagem foi enviada.");
-		
-		return newUser.getVerificationCode();
-	}
+        newUser.setLogin(userDTO.getEmail());
+        newUser.setLastUpdate(new Date());
 
-	public String createRandomCode(int tamanhoCodigo, String caracteresUsados) {
-		List<Character> grupoCaracteres = caracteresUsados.chars().mapToObj(i -> (char) i).collect(Collectors.toList());
-		Collections.shuffle(grupoCaracteres, new SecureRandom());
-		return grupoCaracteres.stream().map(Object::toString).limit(tamanhoCodigo).collect(Collectors.joining());
-	}
+        String password = CriptexCustom.encrypt(userDTO.getPassword());
 
-	public User refreshPassword(String password, String login) {
-		User newUser = new User();
-		User user = userRepository.findByEmail(login);
-		if(user == null) {
-			throw new UserNotFoundException();
-		}
-		newUser = user;
-		
-		newUser.setPassword(CriptexCustom.encrypt(password));
-		return userRepository.save(newUser);
-	}
+        newUser.setPassword(password);
+
+        if (userDTO.getEmail().equals(adminEmail)) {
+            newUser.getRoles().add(UserTypeEnum.ADMIN);
+        } else {
+            newUser.getRoles().add(UserTypeEnum.CLIENTE);
+        }
+
+        return newUser;
+    }
+
+    @ExceptionHandler({Exception.class})
+    public LoginResultDTO login(String login, String password, String token) throws Exception {
+        if (password.length() < 6) {
+            throw new WrongPasswordException();
+        }
+        password = CriptexCustom.encrypt(password);
+        User user = userRepository.findByLoginAndPassword(login, password);
+        User userLogin = userRepository.findByLogin(login);
+        if (user == null) {
+            if (userLogin == null) {
+                throw new LoginNotFoundException();
+            }
+            if (!userLogin.getPassword().equals(password)) {
+                throw new WrongPasswordException();
+            }
+        }
+
+        LoginResultDTO dto = this.tokenService.createTokenForUser(user);
+        dto.setUserId(user.getId());
+        if (user.getName() != null && !user.getName().equals("")) {
+
+            dto.setUserName(normalizeString(user.getName()));
+        }
+        if (token != null && !user.getDevices().contains(token)) {
+            user.getDevices().add(token);
+        }
+        userRepository.save(user);
+
+        return dto;
+    }
+
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    public User register(UserDTO userDTO) {
+        User user = parseDTOToEntity(userDTO);
+        return userRepository.save(user);
+    }
+
+    public void delete(String login) {
+        User user = userRepository.findByLogin(login);
+        if (user != null) {
+            user.setDeleted(true);
+            userRepository.save(user);
+        } else {
+            throw new UserNotFoundException();
+        }
+    }
+
+    public String getVerificationCode(String login) {
+        User user = userRepository.findByEmail(login);
+        if (user == null) {
+            throw new UserNotFoundException();
+        }
+
+        return user.getVerificationCode();
+    }
+
+    public boolean checkIfCodesAreEqual(String login, String newCode) {
+        User user = userRepository.findByEmail(login);
+        if (user == null) {
+            throw new UserNotFoundException();
+        }
+
+        if (user.getVerificationCode().equals(newCode)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public String normalizeString(String string) {
+        return Normalizer.normalize(string, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+    }
+
+    public String sendVerificationMail(String login) {
+        User newUser;
+        User user = userRepository.findByEmail(login);
+        if (user == null) {
+            throw new UserNotFoundException();
+        }
+        newUser = user;
+
+        System.out.println("Preparando para enviar a mensagem...");
+
+        String verificationCode = this.createRandomCode(6, "0123456789");
+
+        newUser.setVerificationCode(verificationCode);
+        newUser = userRepository.save(newUser);
+
+        String fullName = newUser.getName();
+        String firstName = fullName.split(" ", 0)[0];
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(companyEmail);
+        message.setTo(newUser.getEmail());
+        message.setText("Olá, " + firstName + "! Seu código de verificação para a alteração da senha é:\n\n" + newUser.getVerificationCode() + "\n\nAgora é só entrar no aplicativo GasOut e escolher uma nova senha.");
+        message.setSubject("Alteração de senha no aplicativo GasOut");
+
+        mailSender.send(message);
+
+        System.out.println("A Mensagem foi enviada.");
+
+        return newUser.getVerificationCode();
+    }
+
+    public String createRandomCode(int tamanhoCodigo, String caracteresUsados) {
+        List<Character> grupoCaracteres = caracteresUsados.chars().mapToObj(i -> (char) i).collect(Collectors.toList());
+        Collections.shuffle(grupoCaracteres, new SecureRandom());
+        return grupoCaracteres.stream().map(Object::toString).limit(tamanhoCodigo).collect(Collectors.joining());
+    }
+
+    public User refreshPassword(String password, String login) {
+        User newUser;
+        User user = userRepository.findByEmail(login);
+        if (user == null) {
+            throw new UserNotFoundException();
+        }
+        newUser = user;
+
+        newUser.setPassword(CriptexCustom.encrypt(password));
+        return userRepository.save(newUser);
+    }
 }

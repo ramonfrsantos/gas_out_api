@@ -5,11 +5,11 @@ import lombok.Data;
 @Data
 public class UserJWT {
 
-	private Long id;
-	private String login;
+    private Long id;
+    private String login;
 
-	public UserJWT(Long id, String login) {
-		this.id = id;
-	    this.login = login;
-	}
+    public UserJWT(Long id, String login) {
+        this.id = id;
+        this.login = login;
+    }
 }
