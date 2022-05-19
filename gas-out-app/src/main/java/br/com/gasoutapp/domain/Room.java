@@ -42,6 +42,9 @@ public class Room {
     @Column(name = "sensor_value")
     private Integer sensorValue;
 
+    @Column(name = "user_email")
+    private String userEmail;
+
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "fk_user")

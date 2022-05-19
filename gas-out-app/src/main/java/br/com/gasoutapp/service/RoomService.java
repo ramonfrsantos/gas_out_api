@@ -55,6 +55,7 @@ public class RoomService {
 
         newRoom.setUser(user);
         newRoom.setName(dto.getName());
+        newRoom.setUserEmail(user.getEmail());
         newRoom = roomRepository.save(newRoom);
 
         newUserRooms.add(newRoom);
@@ -66,7 +67,7 @@ public class RoomService {
     }
 
     public Room sendRoomSensorValue(RoomDTO dto) {
-        List<Room> newUserRooms;
+        Room newRoom = new Room();
 
         User user = userRepository.findByLogin(dto.getUser().getEmail());
         if (user == null) {
@@ -75,21 +76,15 @@ public class RoomService {
 
         List<Room> rooms = roomRepository.findAllByUser(user);
         for (Room room : rooms) {
-            if (room.getName().equals(dto.getName())) {
-                throw new RoomAlreadyExistsException();
+            if (room.getName().equalsIgnoreCase(dto.getName())) {
+                newRoom = room;
+                newRoom.setSensorValue(dto.getSensorValue());
+                newRoom.setAlarmOn(dto.isAlarmOn());
+                newRoom.setNotificationOn(dto.isNotificationOn());
+                newRoom.setSprinklersOn(dto.isSprinklersOn());
+                roomRepository.save(newRoom);
             }
         }
-        newUserRooms = rooms;
-
-        Room newRoom = new Room();
-
-        newRoom.setSensorValue(dto.getSensorValue());
-        newRoom.setAlarmOn(dto.isAlarmOn());
-        newRoom.setNotificationOn(dto.isNotificationOn());
-        newRoom.setSprinklersOn(dto.isSprinklersOn());
-        newRoom = roomRepository.save(newRoom);
-
-        newUserRooms.add(newRoom);
 
         return newRoom;
     }

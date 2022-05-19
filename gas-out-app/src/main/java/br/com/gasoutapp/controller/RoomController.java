@@ -47,7 +47,7 @@ public class RoomController {
 
 	@CrossOrigin(origins = "*", maxAge = 7200)
 	@ResponseStatus(HttpStatus.OK)
-	@ApiOperation(value = "Criar cômodo para o usuário")
+	@ApiOperation(value = "Enviar valor recebido pelo sensor")
 	@RequestMapping(value = "/send-sensor-value", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
 	@ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
 	public Room sendRoomSensorValue(@RequestBody RoomDTO dto){

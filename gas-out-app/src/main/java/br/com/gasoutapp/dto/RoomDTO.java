@@ -7,6 +7,7 @@ import lombok.Data;
 public class RoomDTO {
 	private Long id;
 	private String name;
+	private String userEmail;
     private boolean alarmOn;
 	private boolean notificationOn;
 	private boolean sprinklersOn;	
