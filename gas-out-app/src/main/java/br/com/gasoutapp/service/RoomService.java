@@ -89,27 +89,13 @@ public class RoomService {
         return newRoom;
     }
 
-    public void deleteRoom(Long id, String login) {
-        Room checkedRoom = roomRepository.getById(id);
-        if (checkedRoom == null) {
+    public void deleteRoom(Long id) {
+        Room room = roomRepository.getById(id);
+        if (room == null) {
             throw new RoomNotFoundException();
-        }
-        User user = userRepository.findByLogin(login);
-        if (user != null) {
-            User newUser;
-            newUser = user;
-
-            List<Room> roomsList = roomRepository.findAllByUser(user);
-            for (Room room : roomsList) {
-                if (room.getId() == id) {
-                    room.setUser(null);
-                    roomRepository.save(room);
-
-                    newUser.setRooms(roomRepository.findAllByUser(user));
-                    userRepository.save(newUser);
-                    roomRepository.delete(room);
-                }
-            }
+        } else {
+            room.setDeleted(true);
+            roomRepository.save(room);
         }
     }
 }

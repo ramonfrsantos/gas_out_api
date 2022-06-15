@@ -57,9 +57,9 @@ public class RoomController {
 	@CrossOrigin(origins = "*", maxAge = 7200)
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Excluir cômodo por id")
-	@RequestMapping(value = "/delete/{login}/{id}", method = RequestMethod.DELETE, produces = "application/json;charset=UTF-8")
+	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE, produces = "application/json;charset=UTF-8")
 	@ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
-	public void  deleteRoom(@PathVariable Long id, @PathVariable String login){
-		roomService.deleteRoom(id, login);
+	public void deleteRoom(@PathVariable Long id){
+		roomService.deleteRoom(id);
 	}	
 }

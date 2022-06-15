@@ -68,33 +68,22 @@ public class NotificationService {
 
         List<Notification> notificationsUserNull = notificationRepository.findAllByUser(null);
         if (notificationsUserNull.size() > 0) {
-            notificationRepository.deleteAll(notificationsUserNull);
+            for (Notification notification: notificationsUserNull){
+                notification.setDeleted(true);
+                notificationRepository.save(notification);
+            }
         }
 
         return newNotification;
     }
 
-    public void deleteNotification(Long id, String login) {
-        Notification checkedNotification = notificationRepository.getById(id);
-        if (checkedNotification == null) {
-            throw new NotificationNotFoundException();
-        }
-
-        User user = userRepository.findByLogin(login);
-        if (user != null) {
-            User newUser;
-            newUser = user;
-            List<Notification> notificationsList = notificationRepository.findAllByUser(user);
-            for (Notification notification : notificationsList) {
-                if (notification.getId() == id) {
-                    notification.setUser(null);
-                    notificationRepository.save(notification);
-
-                    newUser.setNotifications(notificationRepository.findAllByUser(user));
-                    userRepository.save(newUser);
-                    notificationRepository.delete(notification);
-                }
-            }
+    public void deleteNotification(Long id) {
+        Notification notification = notificationRepository.getById(id);
+        if(notification == null){
+            throw  new NotificationNotFoundException();
+        } else {
+            notification.setDeleted(true);
+            notificationRepository.save(notification);
         }
     }
 
