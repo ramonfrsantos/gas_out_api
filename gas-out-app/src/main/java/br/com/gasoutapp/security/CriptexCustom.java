@@ -16,7 +16,7 @@ import java.util.logging.Level;
 @Log
 public class CriptexCustom {
 
-    private static final String secret = "GasOutDOMESL9"; // secret key length must be 16
+    private static final String secret = "GasoutappCONFIG9"; // secret key length must be 16
 
     private static SecretKey key;
 

@@ -4,59 +4,62 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import br.com.gasoutapp.domain.Notification;
-import br.com.gasoutapp.dto.NotificationDTO;
-import br.com.gasoutapp.service.NotificationService;
+import br.com.gasoutapp.domain.Room;
+import br.com.gasoutapp.dto.RoomDTO;
+import br.com.gasoutapp.service.RoomService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@RequestMapping("notification")
-public class NotificationController {
+@RequestMapping("room")
+public class RoomController {
 	@Autowired
-	private NotificationService notificationService;
+	private RoomService roomService;
 	
 	@CrossOrigin(origins = "*", maxAge = 7200)
 	@ResponseStatus(HttpStatus.OK)
-	@ApiOperation(value = "Listar notificações")
+	@ApiOperation(value = "Listar cômodos cadastrados")
 	@RequestMapping(value = "/find-all", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	@ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
-	public List<Notification> getAllNotifications(){
-		return notificationService.getAllNotifications();
+	public List<Room> getAllRooms(){
+		return roomService.getAllRooms();
 	}
 	
 	@CrossOrigin(origins = "*", maxAge = 7200)
 	@ResponseStatus(HttpStatus.OK)
-	@ApiOperation(value = "Listar notificações recentes")
-	@RequestMapping(value = "/find-all-recent/{login}", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+	@ApiOperation(value = "Listar cômodos cadastrados do usuário")
+	@RequestMapping(value = "/find-all/{login}", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
 	@ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
-	public List<Notification> getAllRecentNotifications(@PathVariable String login){
-		return notificationService.getAllRecentNotifications(login);
-	}
-	
-	@CrossOrigin(origins = "*", maxAge = 7200)
-	@ResponseStatus(HttpStatus.OK)
-	@ApiOperation(value = "Criar notificação")
-	@RequestMapping(value = "/create", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
-	public Notification createNotification(@RequestBody NotificationDTO dto){
-		return notificationService.createNotification(dto);
+	public List<Room> getAllUserRooms(@PathVariable String login){
+		return roomService.getAllUserRooms(login);
 	}	
 	
 	@CrossOrigin(origins = "*", maxAge = 7200)
 	@ResponseStatus(HttpStatus.OK)
-	@ApiOperation(value = "Excluir notificação por id")
+	@ApiOperation(value = "Criar cômodo para o usuário")
+	@RequestMapping(value = "/create", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
+	public Room createRoom(@RequestBody RoomDTO dto){
+		return roomService.createRoom(dto);
+	}
+
+	@CrossOrigin(origins = "*", maxAge = 7200)
+	@ResponseStatus(HttpStatus.OK)
+	@ApiOperation(value = "Enviar valor recebido pelo sensor")
+	@RequestMapping(value = "/send-sensor-value", method = RequestMethod.PUT, produces = "application/json;charset=UTF-8")
+	@ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
+	public Room sendRoomSensorValue(@RequestBody RoomDTO dto){
+		return roomService.sendRoomSensorValue(dto);
+	}
+	
+	@CrossOrigin(origins = "*", maxAge = 7200)
+	@ResponseStatus(HttpStatus.OK)
+	@ApiOperation(value = "Excluir cômodo por id")
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE, produces = "application/json;charset=UTF-8")
 	@ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer access_token")
-	public void deleteNotification(@PathVariable Long id){
-		notificationService.deleteNotification(id);
+	public void deleteRoom(@PathVariable Long id){
+		roomService.deleteRoom(id);
 	}	
 }

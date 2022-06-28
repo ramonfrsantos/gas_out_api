@@ -1,7 +1,5 @@
 package br.com.gasoutapp.domain;
 
-import java.util.Date;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,8 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -25,26 +21,34 @@ import org.hibernate.annotations.Where;
 @DynamicUpdate
 @Data
 @Entity
-@Table(name = "t_notification")
+@Table(name = "t_room")
 @Where(clause = "deleted = false")
-public class Notification {
+public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "title")
-    private String title;
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "notification_on")
+    private boolean notificationOn;
+
+    @Column(name = "alarm_on")
+    private boolean alarmOn;
+
+    @Column(name = "sprinklers_on")
+    private boolean sprinklersOn;
+
+    @Column(name = "sensor_value")
+    private Integer sensorValue;
+
+    @Column(name = "user_email")
+    private String userEmail;
 
     @Column(name = "deleted")
     private boolean deleted;
-
-    @Column(name = "message")
-    private String message;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "notification_date")
-    private Date date;
 
     @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

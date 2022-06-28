@@ -3,19 +3,19 @@ package br.com.gasoutapp.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(code = HttpStatus.NOT_FOUND)
-public class NotificationNotFoundException extends RuntimeException {
+@ResponseStatus(code = HttpStatus.FOUND)
+public class RoomAlreadyExistsException extends RuntimeException {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -1391752234632451828L;
 	
-	public NotificationNotFoundException() {
-        super("Notificação não encontrada.");
+	public RoomAlreadyExistsException() {
+        super("Esse cômodo já foi cadastrado.");
     }
 
-    public NotificationNotFoundException(String message) {
+    public RoomAlreadyExistsException(String message) {
         super(message);
     }
 }
