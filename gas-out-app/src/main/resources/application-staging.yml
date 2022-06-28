@@ -14,18 +14,19 @@ spring:
   application:
     name: gas-out-api-dev
   datasource:
-    url: jdbc:oracle:thin:@gasout-oracle-db.cuzy047ggzgj.us-east-1.rds.amazonaws.com:1521:gasout2
+    url: jdbc:oracle:thin:@localhost:1521:gasout2
     username: admin
     password: GasOut2022
-    driver-class-name: oracle.jdbc.OracleDriver
+    driver-class-name: oracle.jdbc.driver.OracleDriver
     hikari:
       max-lifetime:  600000
   jpa:
     show-sql: true
     generate-ddl: true
-    database-platform: org.hibernate.dialect.Oracle10gDialect
+    database-platform: org.hibernate.dialect.Oracle12cDialect
     hibernate:
       ddl-auto: create
+      use-new-id-generator-mapping: false
   mvc:
     pathmatch:
       matching-strategy: ant-path-matcher
